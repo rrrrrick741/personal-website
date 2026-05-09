@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const links = [
   { href: "/", label: "首页" },
   { href: "/focus", label: "专注" },
+  { href: "/english", label: "英语" },
   { href: "/news", label: "新闻" },
 ];
 
@@ -21,7 +22,7 @@ export default function Navbar() {
         >
           Rick
         </Link>
-        <ul className="flex items-center gap-6 list-none m-0 p-0">
+        <ul className="flex items-center gap-5 list-none m-0 p-0">
           {links.map(({ href, label }) => (
             <li key={href}>
               <Link
