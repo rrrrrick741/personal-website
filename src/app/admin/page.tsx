@@ -34,16 +34,16 @@ export default function AdminPage() {
         }),
       });
 
-      if (!res.ok) throw new Error("Save failed");
+      if (!res.ok) throw new Error("保存失败");
 
-      setMessage("Learning record saved successfully!");
+      setMessage("学习记录保存成功！");
       setSubject("");
       setDuration("");
       setTags("");
       setContent("");
       router.refresh();
     } catch {
-      setMessage("Failed to save. Try again.");
+      setMessage("保存失败，请重试。");
     } finally {
       setSaving(false);
     }
@@ -51,46 +51,46 @@ export default function AdminPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-16">
-      <header className="mb-12">
+      <header className="mb-10">
         <h1 className="text-3xl font-bold tracking-tight text-[--color-text] mb-2">
-          Admin
+          管理
         </h1>
-        <p className="text-[--color-text-secondary]">
-          Add a new learning record.
+        <p className="text-sm text-[--color-text-secondary]">
+          添加新的学习记录。
         </p>
       </header>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label className="block text-sm text-[--color-text-secondary] mb-1.5">
-            Date
+          <label className="block text-xs text-[--color-text-secondary] mb-1.5">
+            日期
           </label>
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
-            className="w-full border border-[--color-border] rounded-lg px-4 py-2 text-sm text-[--color-text] bg-white focus:outline-none focus:border-[--color-text] transition-colors"
+            className="w-full border border-[--color-border] rounded-[--radius-sm] px-4 py-2.5 text-sm text-[--color-text] bg-white focus:outline-none focus:border-[--color-text] transition-colors"
           />
         </div>
 
         <div>
-          <label className="block text-sm text-[--color-text-secondary] mb-1.5">
-            Subject
+          <label className="block text-xs text-[--color-text-secondary] mb-1.5">
+            主题
           </label>
           <input
             type="text"
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             required
-            placeholder="e.g. React Performance Optimization"
-            className="w-full border border-[--color-border] rounded-lg px-4 py-2 text-sm text-[--color-text] bg-white focus:outline-none focus:border-[--color-text] transition-colors placeholder:text-[--color-text-secondary]"
+            placeholder="例如：React 性能优化"
+            className="w-full border border-[--color-border] rounded-[--radius-sm] px-4 py-2.5 text-sm text-[--color-text] bg-white focus:outline-none focus:border-[--color-text] transition-colors placeholder:text-[--color-text-tertiary]"
           />
         </div>
 
         <div>
-          <label className="block text-sm text-[--color-text-secondary] mb-1.5">
-            Duration (minutes)
+          <label className="block text-xs text-[--color-text-secondary] mb-1.5">
+            时长（分钟）
           </label>
           <input
             type="number"
@@ -99,50 +99,50 @@ export default function AdminPage() {
             required
             min={1}
             placeholder="120"
-            className="w-full border border-[--color-border] rounded-lg px-4 py-2 text-sm text-[--color-text] bg-white focus:outline-none focus:border-[--color-text] transition-colors placeholder:text-[--color-text-secondary]"
+            className="w-full border border-[--color-border] rounded-[--radius-sm] px-4 py-2.5 text-sm text-[--color-text] bg-white focus:outline-none focus:border-[--color-text] transition-colors placeholder:text-[--color-text-tertiary]"
           />
         </div>
 
         <div>
-          <label className="block text-sm text-[--color-text-secondary] mb-1.5">
-            Tags (comma separated)
+          <label className="block text-xs text-[--color-text-secondary] mb-1.5">
+            标签（逗号分隔）
           </label>
           <input
             type="text"
             value={tags}
             onChange={(e) => setTags(e.target.value)}
             placeholder="React, Frontend"
-            className="w-full border border-[--color-border] rounded-lg px-4 py-2 text-sm text-[--color-text] bg-white focus:outline-none focus:border-[--color-text] transition-colors placeholder:text-[--color-text-secondary]"
+            className="w-full border border-[--color-border] rounded-[--radius-sm] px-4 py-2.5 text-sm text-[--color-text] bg-white focus:outline-none focus:border-[--color-text] transition-colors placeholder:text-[--color-text-tertiary]"
           />
         </div>
 
         <div>
-          <label className="block text-sm text-[--color-text-secondary] mb-1.5">
-            Content (Markdown)
+          <label className="block text-xs text-[--color-text-secondary] mb-1.5">
+            内容（Markdown）
           </label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
             rows={8}
-            placeholder="- Virtual DOM principles&#10;- useMemo / useCallback best practices"
-            className="w-full border border-[--color-border] rounded-lg px-4 py-2 text-sm text-[--color-text] bg-white focus:outline-none focus:border-[--color-text] transition-colors placeholder:text-[--color-text-secondary] resize-y"
+            placeholder="- 虚拟 DOM 原理&#10;- useMemo / useCallback 最佳实践"
+            className="w-full border border-[--color-border] rounded-[--radius-sm] px-4 py-2.5 text-sm text-[--color-text] bg-white focus:outline-none focus:border-[--color-text] transition-colors placeholder:text-[--color-text-tertiary] resize-y"
           />
         </div>
 
         <button
           type="submit"
           disabled={saving}
-          className="w-full bg-[--color-text] text-white text-sm font-medium py-3 rounded-lg hover:bg-[--color-accent] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full bg-[--color-text] text-white text-sm font-medium py-3 rounded-full hover:bg-[--color-accent-hover] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {saving ? "Saving..." : "Save Record"}
+          {saving ? "保存中..." : "保存记录"}
         </button>
 
         {message && (
           <p
             className={`text-sm text-center ${
-              message.includes("Failed")
-                ? "text-red-600"
+              message.includes("失败")
+                ? "text-red-500"
                 : "text-green-600"
             }`}
           >

@@ -5,8 +5,8 @@ import type { NewsItem } from "@/lib/news";
 import NewsCard from "@/components/NewsCard";
 
 const tabs: { key: NewsItem["category"]; label: string }[] = [
-  { key: "politics", label: "Politics" },
-  { key: "economics", label: "Economics" },
+  { key: "politics", label: "政治" },
+  { key: "economics", label: "经济" },
   { key: "ai", label: "AI" },
 ];
 
@@ -22,11 +22,11 @@ export default function NewsPage() {
     async function load() {
       try {
         const res = await fetch("/api/news");
-        if (!res.ok) throw new Error("Failed to fetch");
+        if (!res.ok) throw new Error("获取失败");
         const data = await res.json();
         setNews(data);
       } catch {
-        setError("Failed to load news. Please try again later.");
+        setError("加载失败，请稍后重试。");
       } finally {
         setLoading(false);
       }
@@ -36,12 +36,12 @@ export default function NewsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-16">
-      <header className="mb-12">
+      <header className="mb-10">
         <h1 className="text-3xl font-bold tracking-tight text-[--color-text] mb-2">
-          News
+          新闻
         </h1>
-        <p className="text-[--color-text-secondary]">
-          Daily top 10 stories across politics, economics, and AI.
+        <p className="text-sm text-[--color-text-secondary]">
+          每日精选 — 政治 · 经济 · AI 各 10 条
         </p>
       </header>
 
@@ -59,7 +59,7 @@ export default function NewsPage() {
           >
             {label}
             {!loading && news[key] && (
-              <span className="ml-1.5 text-xs text-[--color-text-secondary]">
+              <span className="ml-1.5 text-xs text-[--color-text-tertiary]">
                 ({news[key].length})
               </span>
             )}
@@ -69,13 +69,13 @@ export default function NewsPage() {
 
       {/* Content */}
       {loading && (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="border border-[--color-border] rounded-lg p-5 animate-pulse"
+              className="border border-[--color-border] rounded-[--radius-lg] p-5 animate-pulse"
             >
-              <div className="h-3 bg-[--color-border] rounded w-20 mb-3" />
+              <div className="h-3 bg-[--color-border] rounded w-16 mb-3" />
               <div className="h-4 bg-[--color-border] rounded w-3/4 mb-2" />
               <div className="h-3 bg-[--color-border] rounded w-full" />
             </div>
@@ -85,7 +85,7 @@ export default function NewsPage() {
 
       {error && (
         <div className="text-center py-12">
-          <p className="text-[--color-text-secondary]">{error}</p>
+          <p className="text-sm text-[--color-text-secondary]">{error}</p>
         </div>
       )}
 
@@ -93,8 +93,8 @@ export default function NewsPage() {
         <>
           {news[activeTab]?.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-[--color-text-secondary]">
-                No news available right now.
+              <p className="text-sm text-[--color-text-secondary]">
+                暂无新闻。
               </p>
             </div>
           )}

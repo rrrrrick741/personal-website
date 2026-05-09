@@ -4,8 +4,8 @@ import Footer from "@/components/Footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Rick - Personal Site",
-  description: "Learning tracker and daily news digest",
+  title: "Rick — 个人主页",
+  description: "专注追踪 · 每日待办 · 学习记录 · 新闻速览",
 };
 
 export default function RootLayout({
