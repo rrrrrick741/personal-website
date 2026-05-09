@@ -68,6 +68,7 @@ export default function FocusPage() {
   const [accentColor, setAccentColor] = useState("#1a1a1a");
   const [bgImage, setBgImage] = useState("none");
   const [bgSize, setBgSize] = useState("auto");
+  const [blobsVisible, setBlobsVisible] = useState(true);
 
   // Load settings from localStorage
   useEffect(() => {
@@ -80,6 +81,12 @@ export default function FocusPage() {
     if (savedBg) setBgImage(savedBg);
     const savedBgSize = localStorage.getItem("bg-size");
     if (savedBgSize) setBgSize(savedBgSize);
+    const savedBlobs = localStorage.getItem("blobs-visible");
+    if (savedBlobs !== null) {
+      const visible = savedBlobs === "true";
+      setBlobsVisible(visible);
+      if (!visible) document.body.classList.add("hide-blobs");
+    }
   }, []);
 
   // Apply background
@@ -94,6 +101,17 @@ export default function FocusPage() {
     localStorage.setItem("bg-image", bgImage);
     if (bgSize) localStorage.setItem("bg-size", bgSize);
   }, [bgImage, bgSize]);
+
+  function toggleBlobs() {
+    const next = !blobsVisible;
+    setBlobsVisible(next);
+    if (next) {
+      document.body.classList.remove("hide-blobs");
+    } else {
+      document.body.classList.add("hide-blobs");
+    }
+    localStorage.setItem("blobs-visible", String(next));
+  }
 
   function setAccent(color: string) {
     setAccentColor(color);
@@ -271,6 +289,30 @@ export default function FocusPage() {
                 className="px-3 py-1.5 text-xs rounded-full border border-dashed border-[--color-border] text-[--color-text-tertiary] hover:border-[--color-text] transition-colors"
               >
                 + 自定义
+              </button>
+            </div>
+          </div>
+
+          {/* Blob toggle */}
+          <div className="mt-4 pt-4 border-t border-[--color-border]">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs text-[--color-text]">律动斑点</p>
+                <p className="text-[10px] text-[--color-text-tertiary] mt-0.5">
+                  黑色斑点呼吸动画背景
+                </p>
+              </div>
+              <button
+                onClick={toggleBlobs}
+                className={`relative w-10 h-5 rounded-full transition-colors ${
+                  blobsVisible ? "bg-[--color-text]" : "bg-[--color-border]"
+                }`}
+              >
+                <span
+                  className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform ${
+                    blobsVisible ? "translate-x-5" : "translate-x-0.5"
+                  }`}
+                />
               </button>
             </div>
           </div>

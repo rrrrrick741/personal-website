@@ -53,6 +53,11 @@
     border: 1px solid rgba(0, 0, 0, 0.06);
   }
 
+  /* Hide breathing blobs */
+  .hide-blobs [data-blob-container] {
+    display: none;
+  }
+
   /* Custom scrollbar */
   .scroll-thin::-webkit-scrollbar {
     width: 4px;
