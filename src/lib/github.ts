@@ -1,16 +1,13 @@
-import fs from "fs";
-import path from "path";
-
 export interface GitHubRepo {
   rank: number;
-  name: string; // "owner/repo"
+  name: string;
   url: string;
   description: string;
   stars: number;
   language: string;
   topics: string[];
   readme: string;
-  starsGrowth: number; // stars gained this week
+  starsGrowth: number;
 }
 
 export interface WeeklySnapshot {
@@ -20,19 +17,15 @@ export interface WeeklySnapshot {
   repos: GitHubRepo[];
 }
 
-const CONTENT_DIR = path.join(process.cwd(), "content", "github");
-
 /** Generate ISO week key e.g. "2026-W20" */
 export function getWeekKey(date: Date = new Date()): string {
-  // Get the Monday of the current week
   const d = new Date(date);
   const day = d.getDay();
-  const diff = d.getDate() - day + (day === 0 ? -6 : 1); // Monday
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
   const monday = new Date(d.setDate(diff));
   monday.setHours(0, 0, 0, 0);
 
   const year = monday.getFullYear();
-  // ISO week number
   const jan1 = new Date(year, 0, 1);
   const weekNum = Math.ceil(
     ((monday.getTime() - jan1.getTime()) / 86400000 + jan1.getDay() + 1) / 7
@@ -60,6 +53,18 @@ export function getWeekDates(weekKey: string): { startDate: string; endDate: str
   return { startDate: fmt(monday), endDate: fmt(sunday) };
 }
 
+/** Generate list of recent week keys for the selector */
+export function getRecentWeekKeys(count: number = 8): string[] {
+  const today = new Date();
+  const weeks: string[] = [];
+  for (let i = 0; i < count; i++) {
+    const d = new Date(today);
+    d.setDate(d.getDate() - i * 7);
+    weeks.push(getWeekKey(d));
+  }
+  return [...new Set(weeks)];
+}
+
 const GITHUB_API = "https://api.github.com";
 
 const headers: Record<string, string> = {
@@ -85,12 +90,10 @@ async function githubFetch(url: string) {
   return res.json();
 }
 
-export async function fetchWeeklyTrending(): Promise<GitHubRepo[]> {
-  const weekKey = getWeekKey();
-  const { startDate } = getWeekDates(weekKey);
+export async function fetchWeeklyTrending(startDate?: string): Promise<GitHubRepo[]> {
+  const date = startDate || getWeekDates(getWeekKey()).startDate;
 
-  // Search repos created in the last 7 days, sorted by stars
-  const query = `created:>=${startDate}`;
+  const query = `created:>=${date}`;
   const url = `${GITHUB_API}/search/repositories?q=${encodeURIComponent(query)}&sort=stars&order=desc&per_page=10`;
 
   const data = await githubFetch(url);
@@ -98,7 +101,6 @@ export async function fetchWeeklyTrending(): Promise<GitHubRepo[]> {
 
   const repos: GitHubRepo[] = await Promise.all(
     items.slice(0, 10).map(async (item, i) => {
-      const previousStars = 0; // New repos start at 0
       const readme = await fetchRepoReadme(item.full_name).catch(() => "");
 
       return {
@@ -110,7 +112,7 @@ export async function fetchWeeklyTrending(): Promise<GitHubRepo[]> {
         language: item.language || "Unknown",
         topics: item.topics || [],
         readme,
-        starsGrowth: item.stargazers_count - previousStars,
+        starsGrowth: item.stargazers_count,
       };
     })
   );
@@ -122,46 +124,6 @@ async function fetchRepoReadme(fullName: string): Promise<string> {
   const url = `${GITHUB_API}/repos/${fullName}/readme`;
   const data = await githubFetch(url);
 
-  // README content is base64 encoded
   const content = Buffer.from(data.content, "base64").toString("utf-8");
-  // Truncate to 2000 chars for preview
   return content.length > 2000 ? content.substring(0, 2000) + "\n\n... (truncated)" : content;
-}
-
-export function saveWeeklySnapshot(repos: GitHubRepo[], weekKey?: string): void {
-  if (!fs.existsSync(CONTENT_DIR)) {
-    fs.mkdirSync(CONTENT_DIR, { recursive: true });
-  }
-
-  const key = weekKey || getWeekKey();
-  const { startDate, endDate } = getWeekDates(key);
-
-  const snapshot: WeeklySnapshot = {
-    week: key,
-    startDate,
-    endDate,
-    repos,
-  };
-
-  const filePath = path.join(CONTENT_DIR, `${key}.json`);
-  fs.writeFileSync(filePath, JSON.stringify(snapshot, null, 2), "utf-8");
-}
-
-export function loadWeeklySnapshot(weekKey: string): WeeklySnapshot | null {
-  const filePath = path.join(CONTENT_DIR, `${weekKey}.json`);
-  if (!fs.existsSync(filePath)) return null;
-
-  const raw = fs.readFileSync(filePath, "utf-8");
-  return JSON.parse(raw) as WeeklySnapshot;
-}
-
-export function listAllWeeks(): string[] {
-  if (!fs.existsSync(CONTENT_DIR)) return [];
-
-  return fs
-    .readdirSync(CONTENT_DIR)
-    .filter((f) => f.endsWith(".json"))
-    .map((f) => f.replace(".json", ""))
-    .sort()
-    .reverse();
 }

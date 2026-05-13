@@ -1,10 +1,8 @@
 import {
   fetchWeeklyTrending,
-  loadWeeklySnapshot,
-  saveWeeklySnapshot,
-  listAllWeeks,
   getWeekKey,
   getWeekDates,
+  getRecentWeekKeys,
 } from "@/lib/github";
 
 export const revalidate = 3600;
@@ -13,44 +11,29 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const week = searchParams.get("week");
 
-  if (week) {
-    const snapshot = loadWeeklySnapshot(week);
-    if (!snapshot) {
-      return Response.json({ error: "No data for this week" }, { status: 404 });
-    }
-    return Response.json(
-      { ...snapshot, availableWeeks: listAllWeeks() },
-      {
-        headers: { "Cache-Control": "public, s-maxage=86400, stale-while-revalidate=600" },
-      }
-    );
-  }
-
-  const currentWeek = getWeekKey();
-  const cached = loadWeeklySnapshot(currentWeek);
-
-  if (cached) {
-    return Response.json(
-      { ...cached, availableWeeks: listAllWeeks() },
-      {
-        headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=600" },
-      }
-    );
-  }
-
   try {
-    const repos = await fetchWeeklyTrending();
-    saveWeeklySnapshot(repos, currentWeek);
+    let startDate: string | undefined;
+    let weekKey: string;
+    let displayDates: { startDate: string; endDate: string };
 
-    const { startDate, endDate } = getWeekDates(currentWeek);
+    if (week) {
+      weekKey = week;
+      displayDates = getWeekDates(week);
+      startDate = displayDates.startDate;
+    } else {
+      weekKey = getWeekKey();
+      displayDates = getWeekDates(weekKey);
+    }
+
+    const repos = await fetchWeeklyTrending(startDate);
 
     return Response.json(
       {
-        week: currentWeek,
-        startDate,
-        endDate,
+        week: weekKey,
+        startDate: displayDates.startDate,
+        endDate: displayDates.endDate,
         repos,
-        availableWeeks: listAllWeeks(),
+        availableWeeks: getRecentWeekKeys(),
       },
       {
         headers: { "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=600" },
@@ -59,7 +42,7 @@ export async function GET(request: Request) {
   } catch (err) {
     const message = err instanceof Error ? err.message : "Internal error";
     return Response.json(
-      { error: message, repos: [], availableWeeks: listAllWeeks() },
+      { error: message, repos: [], availableWeeks: getRecentWeekKeys() },
       { status: 200 }
     );
   }
