@@ -8,6 +8,7 @@ const links = [
   { href: "/focus", label: "专注" },
   { href: "/english", label: "英语" },
   { href: "/news", label: "新闻" },
+  { href: "/github", label: "GitHub" },
 ];
 
 export default function Navbar() {
