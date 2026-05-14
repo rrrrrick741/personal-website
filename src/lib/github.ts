@@ -7,6 +7,7 @@ export interface GitHubRepo {
   language: string;
   topics: string[];
   readme: string;
+  readmeLang: "zh" | "en";
   starsGrowth: number;
 }
 
@@ -101,7 +102,10 @@ export async function fetchWeeklyTrending(startDate?: string): Promise<GitHubRep
 
   const repos: GitHubRepo[] = await Promise.all(
     items.slice(0, 10).map(async (item, i) => {
-      const readme = await fetchRepoReadme(item.full_name).catch(() => "");
+      const readmeResult = await fetchRepoReadme(item.full_name).catch(() => ({
+        content: "",
+        lang: "en" as const,
+      }));
 
       return {
         rank: i + 1,
@@ -111,7 +115,8 @@ export async function fetchWeeklyTrending(startDate?: string): Promise<GitHubRep
         stars: item.stargazers_count,
         language: item.language || "Unknown",
         topics: item.topics || [],
-        readme,
+        readme: readmeResult.content,
+        readmeLang: readmeResult.lang,
         starsGrowth: item.stargazers_count,
       };
     })
@@ -120,10 +125,43 @@ export async function fetchWeeklyTrending(startDate?: string): Promise<GitHubRep
   return repos;
 }
 
-async function fetchRepoReadme(fullName: string): Promise<string> {
+async function fetchRepoReadme(
+  fullName: string
+): Promise<{ content: string; lang: "zh" | "en" }> {
+  const chineseVariants = [
+    "README_CN.md",
+    "README.zh-CN.md",
+    "README.zh.md",
+    "README-zh.md",
+    "README-cn.md",
+    "README_zh.md",
+    "readme.zh-CN.md",
+    "README-CN.md",
+    "README_zh-CN.md",
+  ];
+
+  // Try Chinese README variants first
+  for (const variant of chineseVariants) {
+    try {
+      const url = `${GITHUB_API}/repos/${fullName}/contents/${variant}`;
+      const data = await githubFetch(url);
+      const content = Buffer.from(data.content, "base64").toString("utf-8");
+      return {
+        content: content.length > 2000 ? content.substring(0, 2000) + "\n\n... (截断)" : content,
+        lang: "zh",
+      };
+    } catch {
+      // Not found, try next variant
+    }
+  }
+
+  // Fallback to default English README
   const url = `${GITHUB_API}/repos/${fullName}/readme`;
   const data = await githubFetch(url);
 
   const content = Buffer.from(data.content, "base64").toString("utf-8");
-  return content.length > 2000 ? content.substring(0, 2000) + "\n\n... (truncated)" : content;
+  return {
+    content: content.length > 2000 ? content.substring(0, 2000) + "\n\n... (truncated)" : content,
+    lang: "en",
+  };
 }

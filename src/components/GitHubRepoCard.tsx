@@ -82,8 +82,13 @@ export default function GitHubRepoCard({ repo }: Props) {
         {/* Detailed intro / README — expanded */}
         {expanded && repo.readme && (
           <div className="mt-4 pt-4 border-t border-[--color-border]">
-            <h4 className="text-xs font-medium text-[--color-text] mb-2 uppercase tracking-wider">
+            <h4 className="text-xs font-medium text-[--color-text] mb-2 uppercase tracking-wider flex items-center gap-2">
               项目介绍 / 功能
+              {repo.readmeLang === "en" && (
+                <span className="text-[10px] font-normal text-[--color-text-tertiary] bg-[--color-bg-secondary] px-1.5 py-0.5 rounded">
+                  英文原文
+                </span>
+              )}
             </h4>
             <pre className="p-4 bg-[--color-bg-secondary] rounded-[--radius-sm] text-xs text-[--color-text-secondary] leading-relaxed overflow-x-auto max-h-80 overflow-y-auto font-mono whitespace-pre-wrap border-0">
               {repo.readme}
