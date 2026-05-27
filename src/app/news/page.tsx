@@ -35,9 +35,10 @@ export default function NewsPage() {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-16">
-      <header className="mb-10">
-        <h1 className="text-3xl font-bold tracking-tight text-[--color-text] mb-2">
+    <div className="page-shell py-16">
+      <header className="mb-10 border-b border-[--color-border] pb-8">
+        <p className="eyebrow mb-3">Daily Brief</p>
+        <h1 className="text-3xl font-semibold text-[--color-text] mb-2">
           新闻
         </h1>
         <p className="text-sm text-[--color-text-secondary]">
@@ -53,7 +54,7 @@ export default function NewsPage() {
             onClick={() => setActiveTab(key)}
             className={`px-4 py-2 text-sm transition-colors border-b-2 -mb-[1px] ${
               activeTab === key
-                ? "border-[--color-text] text-[--color-text] font-medium"
+                ? "border-[--color-accent] text-[--color-text] font-medium"
                 : "border-transparent text-[--color-text-secondary] hover:text-[--color-text]"
             }`}
           >

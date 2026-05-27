@@ -8,9 +8,10 @@ export default function LearningPage() {
   const entries = getAllLearningEntries();
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-16">
-      <header className="mb-12">
-        <h1 className="text-3xl font-bold tracking-tight text-[--color-text] mb-2">
+    <div className="page-shell py-16">
+      <header className="mb-12 border-b border-[--color-border] pb-8">
+        <p className="eyebrow mb-3">Study Log</p>
+        <h1 className="text-3xl font-semibold text-[--color-text] mb-2">
           Learning
         </h1>
         <p className="text-[--color-text-secondary]">

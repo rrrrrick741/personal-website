@@ -15,7 +15,7 @@ export default function TodoPanel() {
   }, []);
 
   useEffect(() => {
-    fetchTodos();
+    void Promise.resolve().then(fetchTodos);
   }, [fetchTodos]);
 
   async function handleAdd() {
@@ -54,7 +54,7 @@ export default function TodoPanel() {
   const completed = todos.filter((t) => t.completed).length;
 
   return (
-    <div className="bg-white rounded-[--radius-lg] border border-[--color-border] p-5">
+    <div className="warm-surface rounded-[--radius-lg] p-5">
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-medium text-[--color-text]">今日待办</h3>
         {todos.length > 0 && (

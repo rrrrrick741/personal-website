@@ -45,7 +45,7 @@ export default async function GitHubRepoDetailPage({ params }: Props) {
     : "未知";
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-16">
+    <div className="page-shell py-16">
       <div className="mb-8">
         <Link
           href="/github"
@@ -56,16 +56,17 @@ export default async function GitHubRepoDetailPage({ params }: Props) {
       </div>
 
       <header className="mb-8 border-b border-[--color-border] pb-8">
+        <p className="eyebrow mb-3">Repository Detail</p>
         <div className="flex flex-wrap items-center gap-2 mb-3">
           {detail.language && detail.language !== "Unknown" && (
-            <span className="text-xs text-[--color-text-secondary] bg-[--color-bg-secondary] px-2 py-1 rounded-full">
+            <span className="warm-chip text-xs px-2 py-1 rounded-full">
               {detail.language}
             </span>
           )}
           {detail.topics.slice(0, 5).map((topic) => (
             <span
               key={topic}
-              className="text-xs text-[--color-text-secondary] bg-[--color-bg-secondary] px-2 py-1 rounded-full"
+              className="warm-chip text-xs px-2 py-1 rounded-full"
             >
               {topic}
             </span>
@@ -125,14 +126,14 @@ export default async function GitHubRepoDetailPage({ params }: Props) {
         </section>
 
         <aside className="space-y-3">
-          <div className="border border-[--color-border] rounded-[--radius-lg] bg-white p-4">
+          <div className="warm-surface rounded-[--radius-lg] p-4">
             <p className="text-xs text-[--color-text-tertiary] mb-1">Star 数量</p>
             <p className="text-2xl font-semibold text-[--color-text]">
               ⭐ {detail.stars.toLocaleString()}
             </p>
           </div>
 
-          <div className="border border-[--color-border] rounded-[--radius-lg] bg-white p-4 space-y-3">
+          <div className="warm-surface rounded-[--radius-lg] p-4 space-y-3">
             <div>
               <p className="text-xs text-[--color-text-tertiary] mb-1">项目链接</p>
               <a
@@ -159,7 +160,7 @@ export default async function GitHubRepoDetailPage({ params }: Props) {
             )}
           </div>
 
-          <div className="border border-[--color-border] rounded-[--radius-lg] bg-white p-4 space-y-3 text-sm">
+          <div className="warm-surface rounded-[--radius-lg] p-4 space-y-3 text-sm">
             <div className="flex items-center justify-between gap-3">
               <span className="text-[--color-text-tertiary]">Fork</span>
               <span className="text-[--color-text]">{detail.forks.toLocaleString()}</span>

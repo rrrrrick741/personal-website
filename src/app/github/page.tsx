@@ -42,9 +42,10 @@ export default function GitHubTrendingPage() {
       : "";
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-16">
-      <header className="mb-10">
-        <h1 className="text-3xl font-bold tracking-tight text-[--color-text] mb-2">
+    <div className="page-shell py-16">
+      <header className="mb-10 border-b border-[--color-border] pb-8">
+        <p className="eyebrow mb-3">Open Source</p>
+        <h1 className="text-3xl font-semibold text-[--color-text] mb-2">
           GitHub 热门项目
         </h1>
         <p className="text-sm text-[--color-text-secondary]">
@@ -62,7 +63,7 @@ export default function GitHubTrendingPage() {
             onClick={() => setSelectedWeek("")}
             className={`text-xs px-3 py-1.5 rounded-full border transition-colors shrink-0 ${
               selectedWeek === ""
-                ? "border-[--color-text] text-[--color-text] bg-[--color-bg-secondary]"
+                ? "border-[--color-accent] text-[--color-text] bg-[--color-surface-muted]"
                 : "border-[--color-border] text-[--color-text-secondary] hover:text-[--color-text] hover:border-[--color-text-tertiary]"
             }`}
           >
@@ -74,7 +75,7 @@ export default function GitHubTrendingPage() {
               onClick={() => setSelectedWeek(w)}
               className={`text-xs px-3 py-1.5 rounded-full border transition-colors shrink-0 ${
                 selectedWeek === w
-                  ? "border-[--color-text] text-[--color-text] bg-[--color-bg-secondary]"
+                  ? "border-[--color-accent] text-[--color-text] bg-[--color-surface-muted]"
                   : "border-[--color-border] text-[--color-text-secondary] hover:text-[--color-text] hover:border-[--color-text-tertiary]"
               }`}
             >

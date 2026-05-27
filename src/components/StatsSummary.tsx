@@ -20,7 +20,7 @@ export default function StatsSummary({ entries }: Props) {
       {items.map(({ label, value }) => (
         <div
           key={label}
-          className="border border-[--color-border] rounded-lg p-4 text-center bg-white"
+          className="warm-surface rounded-[--radius-lg] p-4 text-center"
         >
           <div className="text-2xl font-semibold text-[--color-text] mb-1">
             {value}

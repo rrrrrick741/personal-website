@@ -6,7 +6,7 @@ interface Props {
 
 export default function LearningCard({ entry }: Props) {
   return (
-    <article className="border border-[--color-border] rounded-lg p-6 bg-white hover:bg-[--color-bg-secondary] transition-colors">
+    <article className="warm-surface warm-surface-hover rounded-[--radius-lg] p-6">
       <div className="flex items-start justify-between mb-3">
         <div>
           <time className="text-sm text-[--color-text-secondary] block mb-1">
@@ -16,7 +16,7 @@ export default function LearningCard({ entry }: Props) {
             {entry.subject}
           </h3>
         </div>
-        <span className="text-sm text-[--color-text-secondary] bg-[--color-bg-secondary] px-3 py-1 rounded-full whitespace-nowrap">
+        <span className="warm-chip text-sm px-3 py-1 rounded-full whitespace-nowrap">
           {entry.duration} min
         </span>
       </div>
@@ -25,7 +25,7 @@ export default function LearningCard({ entry }: Props) {
           {entry.tags.map((tag) => (
             <span
               key={tag}
-              className="text-xs px-2 py-0.5 border border-[--color-border] rounded text-[--color-text-secondary]"
+              className="warm-chip text-xs px-2 py-0.5 rounded"
             >
               {tag}
             </span>

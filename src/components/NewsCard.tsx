@@ -16,10 +16,10 @@ export default function NewsCard({ item }: Props) {
       href={item.link}
       target="_blank"
       rel="noopener noreferrer"
-      className="block border border-[--color-border] rounded-[--radius-lg] p-5 bg-white hover:bg-[--color-bg-secondary] transition-colors no-underline group"
+      className="warm-surface warm-surface-hover block rounded-[--radius-lg] p-5 no-underline group"
     >
       <div className="flex items-center gap-2 mb-2">
-        <span className="text-[10px] uppercase tracking-wider text-[--color-text-secondary] bg-[--color-bg-secondary] px-2 py-0.5 rounded-full">
+        <span className="warm-chip text-[10px] uppercase px-2 py-0.5 rounded-full">
           {categoryLabel[item.category]}
         </span>
         <span className="text-xs text-[--color-text-tertiary]">

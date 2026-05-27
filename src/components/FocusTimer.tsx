@@ -89,7 +89,7 @@ export default function FocusTimer({ onComplete }: Props) {
             cy="120"
             r="110"
             fill="none"
-            stroke="var(--color-text)"
+            stroke="var(--color-accent)"
             strokeWidth="4"
             strokeLinecap="round"
             strokeDasharray={circumference}
@@ -115,7 +115,7 @@ export default function FocusTimer({ onComplete }: Props) {
             onClick={() => setPreset(m)}
             className={`px-3 py-1.5 text-xs rounded-full border transition-colors ${
               minutes === m && !isBreak
-                ? "border-[--color-text] bg-[--color-text] text-white"
+                ? "border-[--color-accent] bg-[--color-accent] text-white"
                 : "border-[--color-border] text-[--color-text-secondary] hover:border-[--color-text]"
             }`}
           >
@@ -128,7 +128,7 @@ export default function FocusTimer({ onComplete }: Props) {
       <div className="flex gap-3">
         <button
           onClick={toggleTimer}
-          className="px-8 py-2 rounded-full bg-[--color-text] text-white text-sm font-medium hover:bg-[--color-accent-hover] transition-colors"
+          className="px-8 py-2 rounded-full bg-[--color-accent] text-white text-sm font-medium hover:bg-[--color-accent-hover] transition-colors"
         >
           {isRunning ? "暂停" : "开始专注"}
         </button>

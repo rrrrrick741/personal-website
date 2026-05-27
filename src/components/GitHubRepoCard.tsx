@@ -12,7 +12,7 @@ export default function GitHubRepoCard({ repo }: Props) {
   return (
     <Link
       href={getRepoDetailHref(repo.name)}
-      className="block border border-[--color-border] rounded-[--radius-lg] bg-white transition-colors hover:bg-[--color-bg-secondary]/50 hover:border-[--color-text-tertiary]"
+      className="warm-surface warm-surface-hover block rounded-[--radius-lg]"
     >
       <div className="p-5">
         <div className="flex items-start gap-4">
@@ -36,14 +36,14 @@ export default function GitHubRepoCard({ repo }: Props) {
             <div className="flex flex-wrap items-center gap-3 mt-2.5">
               {repo.language && (
                 <span className="text-xs text-[--color-text-tertiary] flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-[--color-accent] inline-block" />
+                  <span className="w-2 h-2 rounded-full bg-[--color-sage] inline-block" />
                   {repo.language}
                 </span>
               )}
               {repo.topics.slice(0, 4).map((t) => (
                 <span
                   key={t}
-                  className="text-[10px] text-[--color-text-secondary] bg-[--color-bg-secondary] px-2 py-0.5 rounded-full"
+                  className="warm-chip text-[10px] px-2 py-0.5 rounded-full"
                 >
                   {t}
                 </span>

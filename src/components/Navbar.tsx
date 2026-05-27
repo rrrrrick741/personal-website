@@ -15,23 +15,24 @@ export default function Navbar() {
   const pathname = usePathname();
 
   return (
-    <header className="border-b border-[--color-border] bg-white/80 backdrop-blur-md sticky top-0 z-50">
-      <nav className="max-w-4xl mx-auto px-6 h-14 flex items-center justify-between">
+    <header className="sticky top-0 z-50 border-b border-[--color-border] bg-[--color-bg]/85 backdrop-blur-xl">
+      <nav className="page-shell h-16 flex items-center justify-between">
         <Link
           href="/"
-          className="text-base font-semibold tracking-tight text-[--color-text] no-underline hover:text-[--color-text-secondary] transition-colors"
+          className="flex items-center gap-2 text-base font-semibold text-[--color-text] no-underline hover:text-[--color-accent] transition-colors"
         >
+          <span className="h-2 w-2 rounded-full bg-[--color-accent]" />
           Rick
         </Link>
-        <ul className="flex items-center gap-5 list-none m-0 p-0">
+        <ul className="flex items-center gap-1 list-none m-0 p-0">
           {links.map(({ href, label }) => (
             <li key={href}>
               <Link
                 href={href}
-                className={`text-sm tracking-wide no-underline transition-colors ${
+                className={`rounded-full px-3 py-1.5 text-sm no-underline transition-colors ${
                   pathname === href
-                    ? "text-[--color-text] font-medium"
-                    : "text-[--color-text-secondary] hover:text-[--color-text]"
+                    ? "bg-[--color-surface-muted] text-[--color-text] font-medium"
+                    : "text-[--color-text-secondary] hover:bg-[--color-surface-muted] hover:text-[--color-text]"
                 }`}
               >
                 {label}

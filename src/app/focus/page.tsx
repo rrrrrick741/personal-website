@@ -13,37 +13,37 @@ import type { FocusSession, FocusStats } from "@/lib/focus";
 
 // Preset harmonious accent colors
 const ACCENT_COLORS = [
-  { name: "墨黑", value: "#1a1a1a" },
-  { name: "黛蓝", value: "#3b5998" },
-  { name: "苍绿", value: "#4a7c59" },
-  { name: "赭石", value: "#8b5e3c" },
-  { name: "藕紫", value: "#6b5b7b" },
-  { name: "檀红", value: "#9b4a4a" },
+  { name: "陶土", value: "#9f5a3c" },
+  { name: "鼠尾草", value: "#7f8d73" },
+  { name: "雾蓝", value: "#3f5262" },
+  { name: "栗棕", value: "#6f4d37" },
+  { name: "松烟", value: "#2f3732" },
+  { name: "梅红", value: "#a45d62" },
 ];
 
 // Preset background options
 const BACKGROUNDS = [
-  { name: "纯白", value: "none", preview: "#ffffff" },
+  { name: "暖白", value: "none", preview: "#f8f3eb" },
   {
     name: "网格",
-    value: "linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)",
-    preview: "#fafafa",
-    size: "20px 20px",
+    value: "linear-gradient(rgba(159,90,60,0.09) 1px, transparent 1px), linear-gradient(90deg, rgba(159,90,60,0.09) 1px, transparent 1px)",
+    preview: "#f4eadc",
+    size: "28px 28px",
   },
   {
-    name: "暖灰",
-    value: "linear-gradient(135deg, #f5f5f5 0%, #fafafa 50%, #f0f0f0 100%)",
-    preview: "#f5f5f5",
+    name: "纸页",
+    value: "linear-gradient(135deg, #f8f3eb 0%, #fffaf2 52%, #efe4d6 100%)",
+    preview: "#f8f3eb",
   },
   {
-    name: "晨曦",
-    value: "linear-gradient(135deg, #fefefe 0%, #f7f7f7 50%, #fafaf8 100%)",
-    preview: "#fefefe",
+    name: "晨光",
+    value: "linear-gradient(135deg, #fff7ec 0%, #f7ead8 52%, #edf0e6 100%)",
+    preview: "#fff7ec",
   },
   {
-    name: "雾灰",
-    value: "linear-gradient(180deg, #f8f8f8 0%, #f0f0f0 100%)",
-    preview: "#f8f8f8",
+    name: "浅茶",
+    value: "linear-gradient(180deg, #fbf7f0 0%, #efe4d6 100%)",
+    preview: "#fbf7f0",
   },
 ];
 
@@ -72,21 +72,25 @@ export default function FocusPage() {
 
   // Load settings from localStorage
   useEffect(() => {
-    const savedAccent = localStorage.getItem("accent-color");
-    if (savedAccent) {
-      setAccentColor(savedAccent);
-      document.documentElement.style.setProperty("--color-accent", savedAccent);
-    }
-    const savedBg = localStorage.getItem("bg-image");
-    if (savedBg) setBgImage(savedBg);
-    const savedBgSize = localStorage.getItem("bg-size");
-    if (savedBgSize) setBgSize(savedBgSize);
-    const savedBlobs = localStorage.getItem("blobs-visible");
-    if (savedBlobs !== null) {
-      const visible = savedBlobs === "true";
-      setBlobsVisible(visible);
-      if (!visible) document.body.classList.add("hide-blobs");
-    }
+    const id = window.setTimeout(() => {
+      const savedAccent = localStorage.getItem("accent-color");
+      if (savedAccent) {
+        setAccentColor(savedAccent);
+        document.documentElement.style.setProperty("--color-accent", savedAccent);
+      }
+      const savedBg = localStorage.getItem("bg-image");
+      if (savedBg) setBgImage(savedBg);
+      const savedBgSize = localStorage.getItem("bg-size");
+      if (savedBgSize) setBgSize(savedBgSize);
+      const savedBlobs = localStorage.getItem("blobs-visible");
+      if (savedBlobs !== null) {
+        const visible = savedBlobs === "true";
+        setBlobsVisible(visible);
+        if (!visible) document.body.classList.add("hide-blobs");
+      }
+    }, 0);
+
+    return () => window.clearTimeout(id);
   }, []);
 
   // Apply background
@@ -130,7 +134,7 @@ export default function FocusPage() {
   }, []);
 
   useEffect(() => {
-    fetchData();
+    void Promise.resolve().then(fetchData);
   }, [fetchData]);
 
   async function handleAddSession(e: React.FormEvent) {
@@ -177,11 +181,12 @@ export default function FocusPage() {
   const mins = stats ? stats.todayMinutes % 60 : 0;
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12">
+    <div className="page-shell py-12">
       {/* Header */}
       <div className="flex items-center justify-between mb-10">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-[--color-text] mb-1">
+          <p className="eyebrow mb-3">Focus Room</p>
+          <h1 className="text-3xl font-semibold text-[--color-text] mb-1">
             专注
           </h1>
           <p className="text-sm text-[--color-text-secondary]">
@@ -222,7 +227,7 @@ export default function FocusPage() {
 
       {/* Settings panel */}
       {showSettings && (
-        <div className="mb-10 p-5 rounded-[--radius-lg] border border-[--color-border] bg-white">
+        <div className="warm-surface mb-10 rounded-[--radius-lg] p-5">
           <h3 className="text-sm font-medium text-[--color-text] mb-4">
             个性化设置
           </h3>
@@ -297,9 +302,9 @@ export default function FocusPage() {
           <div className="mt-4 pt-4 border-t border-[--color-border]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-[--color-text]">律动斑点</p>
+                <p className="text-xs text-[--color-text]">纸感装饰</p>
                 <p className="text-[10px] text-[--color-text-tertiary] mt-0.5">
-                  黑色斑点呼吸动画背景
+                  显示背景网格与细线装饰
                 </p>
               </div>
               <button
@@ -355,7 +360,7 @@ export default function FocusPage() {
 
       {/* Timer Section */}
       <div className="mb-10">
-        <div className="bg-white rounded-[--radius-xl] border border-[--color-border] p-8 flex flex-col items-center">
+        <div className="warm-surface rounded-[--radius-xl] p-8 flex flex-col items-center">
           <h2 className="text-sm text-[--color-text-secondary] mb-6 tracking-wide">
             番茄钟
           </h2>
@@ -366,7 +371,7 @@ export default function FocusPage() {
       {/* Charts + Todo grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {/* Charts */}
-        <div className="md:col-span-2 bg-white rounded-[--radius-xl] border border-[--color-border] p-5">
+        <div className="warm-surface md:col-span-2 rounded-[--radius-xl] p-5">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-sm font-medium text-[--color-text]">
               数据统计
@@ -426,7 +431,7 @@ export default function FocusPage() {
       </div>
 
       {/* Recent sessions */}
-      <div className="bg-white rounded-[--radius-xl] border border-[--color-border] p-5">
+      <div className="warm-surface rounded-[--radius-xl] p-5">
         <h3 className="text-sm font-medium text-[--color-text] mb-4">
           最近专注记录
         </h3>
@@ -480,7 +485,7 @@ export default function FocusPage() {
           onClick={() => setShowAddModal(false)}
         >
           <div
-            className="bg-white rounded-[--radius-xl] border border-[--color-border] p-6 w-full max-w-sm mx-4 shadow-2xl"
+            className="warm-surface rounded-[--radius-xl] p-6 w-full max-w-sm mx-4 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="text-lg font-semibold text-[--color-text] mb-5">
@@ -564,7 +569,7 @@ export default function FocusPage() {
 
 function StatCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-white rounded-[--radius-lg] border border-[--color-border] p-4 text-center">
+    <div className="warm-surface rounded-[--radius-lg] p-4 text-center">
       <div className="text-2xl font-semibold text-[--color-text] mb-1 tabular-nums">
         {value}
       </div>
