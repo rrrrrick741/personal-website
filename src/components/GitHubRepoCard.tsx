@@ -1,55 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
 import type { GitHubRepo } from "@/lib/github";
+import { getChineseRepoIntro, getRepoDetailHref } from "@/lib/github";
 
 interface Props {
   repo: GitHubRepo;
 }
 
 export default function GitHubRepoCard({ repo }: Props) {
-  const [expanded, setExpanded] = useState(false);
-
   return (
-    <div
-      className={`border border-[--color-border] rounded-[--radius-lg] bg-white transition-colors cursor-pointer ${
-        expanded ? "border-[--color-text-tertiary]" : "hover:bg-[--color-bg-secondary]/50"
-      }`}
-      onClick={() => setExpanded(!expanded)}
+    <Link
+      href={getRepoDetailHref(repo.name)}
+      className="block border border-[--color-border] rounded-[--radius-lg] bg-white transition-colors hover:bg-[--color-bg-secondary]/50 hover:border-[--color-text-tertiary]"
     >
       <div className="p-5">
-        {/* Rank & Title */}
         <div className="flex items-start gap-4">
           <span className="text-2xl font-bold text-[--color-text-tertiary] tabular-nums shrink-0 mt-0.5">
             #{repo.rank}
           </span>
           <div className="min-w-0 flex-1">
-            {/* Project name */}
             <h3 className="text-base font-semibold text-[--color-text]">
               {repo.name}
             </h3>
 
-            {/* URL — visible only when expanded */}
-            {expanded && (
-              <a
-                href={repo.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-xs text-[--color-text-tertiary] hover:text-[--color-accent] transition-colors break-all mt-0.5 inline-block"
-              >
-                {repo.url.replace("https://", "")}
-              </a>
-            )}
-
-            {/* Brief description — always visible */}
-            {repo.description && (
+            <div className="mt-1.5">
+              <span className="text-[10px] text-[--color-text-tertiary]">
+                中文简介
+              </span>
               <p className="text-sm text-[--color-text-secondary] mt-1.5 leading-relaxed line-clamp-2">
-                {repo.description}
+                {getChineseRepoIntro(repo)}
               </p>
-            )}
+            </div>
 
-            {/* Meta: language, topics, stars */}
             <div className="flex flex-wrap items-center gap-3 mt-2.5">
               {repo.language && (
                 <span className="text-xs text-[--color-text-tertiary] flex items-center gap-1">
@@ -70,46 +53,12 @@ export default function GitHubRepoCard({ repo }: Props) {
               </span>
             </div>
 
-            {/* Expand indicator — collapsed */}
-            {!expanded && repo.readme && (
-              <span className="text-[10px] text-[--color-text-tertiary] mt-2 inline-block">
-                点击查看详情 →
-              </span>
-            )}
+            <span className="text-[10px] text-[--color-text-tertiary] mt-2 inline-block">
+              点击进入项目详情 →
+            </span>
           </div>
         </div>
-
-        {/* Detailed intro / README — expanded */}
-        {expanded && repo.readme && (
-          <div className="mt-4 pt-4 border-t border-[--color-border]">
-            <h4 className="text-xs font-medium text-[--color-text] mb-2 uppercase tracking-wider flex items-center gap-2">
-              项目介绍 / 功能
-              {repo.readmeLang === "en" && (
-                <span className="text-[10px] font-normal text-[--color-text-tertiary] bg-[--color-bg-secondary] px-1.5 py-0.5 rounded">
-                  英文原文
-                </span>
-              )}
-            </h4>
-            <pre className="p-4 bg-[--color-bg-secondary] rounded-[--radius-sm] text-xs text-[--color-text-secondary] leading-relaxed overflow-x-auto max-h-80 overflow-y-auto font-mono whitespace-pre-wrap border-0">
-              {repo.readme}
-            </pre>
-            <div className="mt-3 flex items-center justify-between">
-              <a
-                href={repo.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-xs text-[--color-text-secondary] hover:text-[--color-text] transition-colors underline underline-offset-2"
-              >
-                在 GitHub 上查看 →
-              </a>
-              <span className="text-[10px] text-[--color-text-tertiary]">
-                点击收起
-              </span>
-            </div>
-          </div>
-        )}
       </div>
-    </div>
+    </Link>
   );
 }
